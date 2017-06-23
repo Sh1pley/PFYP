@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css?family=Gravitas+One" rel="stylesheet">
+  <link rel="stylesheet" href="odometer-theme-plaza.css" />
+  <title>Penny for your Poops &#x1F4A9;</title>
+</head>
+<body>
+  <style>
+    html{
+      box-sizing: border-box;
+      background: #232323;
+      font-family: 'Gravitas One', cursive;
+    }
+    .container{
+      display:flex;
+      background-image: url(https://images.unsplash.com/photo-1418754356805-b89082b6965e);
+      min-height: 100vh;
+      justify-content: center;
+    }
+
+    .main{
+      display: flex;
+      justify-content: center;
+    }
+
+    .title{
+      text-align: center;
+      flex:1;
+      color: #f0f8ff;
+    }
+
+    .instructions{
+      color: #f0f8ff;
+      text-align: center;
+      flex: 1;
+    }
+
+    .salary-input{
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    input{
+      flex: 1;
+      min-height: 75px;
+      min-width: 450px;
+      max-width: 700px;
+      align-self: center;
+      font-size: 60px;
+      text-align: center;
+    }
+    input.salary-field{
+      -moz-border-radius: 0.15em;
+      -webkit-border-radius: 0.15em;
+      transition:transform 1s;
+      border-radius: 0.15em;
+      font-family: "Helvetica Neue", sans-serif;
+      transform: translateY(20%);
+      font-weight: 100;
+      padding: 0 0.12em;
+      color: #648baf;
+      background-color: #f0f8ff;
+    }
+
+    input.salary-field-hide{
+      transform: translateY(-25%);
+      visibility: hidden;
+    }
+
+    .counter{
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      justify-content: center;
+      transition:transform 1s;
+      font-size: 100px;
+      text-align: center;
+      visibility: hidden;
+    }
+
+    .odometer{ flex: 1 }
+    .done{ flex: 1; align-self: center; }
+
+    .counter-show{
+      visibility: visible;
+      transform: translateY(-20%)
+    }
+  </style>
+  
+  <div class='container'>
+    <div class'main'>
+      <div class='title'>
+        <h1> Penny for your Poops </h1>
+        <h1>( ಠ ͜ʖರೃ)</h1>
+      </div>
+      <div class='instructions'>
+        <p>Please enter your 'Annual' pay..</p>
+        <p>
+          Annual from Hourly can be estimated by doing the following: <br><br>
+          Double your wage ( 25/hr === 50 ) <br>
+          And multiply by 1000 ( 50 * 1000 = 50k ish Annualy! )
+        </p>
+      </div>
+      <div class='salary-input'>
+        <input class='salary-field' type="integer" onfocus="this.value='';" name="salary" value="$$$"> <br>
+        <input class='submit-button' type="button" value='Get Money'>
+      </div>
+      <div class='counter'>
+        <p class='odometer'></p>
+        <button class='done'>Done!</button>
+      </div>
+    </div>
+
+    
+  </div>
+</body>
+<script type="text/javascript" src="odometer.js"></script>
+<script>
+  window.odometerOptions = {
+    auto: false,
+    selector: '.odometer',
+    format: '( ddd) dd',
+    animation: 'count'
+  };
+  
+  const salaryField = document.querySelector('.salary-field');
+  const select = document.querySelector('.submit-button');
+  const counter = document.querySelector('.counter');
+  const odometer = document.querySelector('.odometer');
+  const done = document.querySelector('.done')
+  let increment = {};
+
+  salaryField.addEventListener('change', function() {
+    this.value = this.value
+  })
+
+  done.addEventListener('click', () => {
+    clearInterval(increment)
+  })
+
+  select.addEventListener('click', () => {
+    const hourlySalary = (parseFloat(salaryField.value) / 1000) / 2;
+    if (hourlySalary === parseInt(hourlySalary)) {
+      counter.classList.toggle('counter-show')
+      salaryField.classList.toggle('salary-field-hide')
+      select.classList.toggle('salary-field-hide')
+      startTimer(hourlySalary)
+    }
+    else return 
+  })
+
+  startTimer = (hourlySalary) => {
+    const secondWage = parseFloat((hourlySalary / 60) / 60);
+    let money = 0.00
+      increment = setInterval(function(){
+        money = money + secondWage
+        if (money < .10) { 
+          odomenter.innerHTML = 9999999;
+        } else {
+          odometer.innerHTML = money
+        }
+      }, 1000);
+  }
+</script>
+
+</html>
